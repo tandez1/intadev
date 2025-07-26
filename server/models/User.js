@@ -17,3 +17,16 @@ const userSchema = new mongoose.Schema({
     match: [/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/, 'Please enter a valid email']
   }
 });
+// Update last seen when user is active
+userSchema.methods.updateLastSeen = function() {
+  this.lastSeen = new Date();
+  this.isOnline = true;
+  return this.save();
+};
+
+// Set user offline
+userSchema.methods.setOffline = function() {
+  this.isOnline = false;
+  this.lastSeen = new Date();
+  return this.save();
+};

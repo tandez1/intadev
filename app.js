@@ -52,7 +52,21 @@
                         description: description.trim(),
                         technologies: technologies.trim(),
                         projectLink: projectLink.trim(),
+            // Validate username format
+            if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+                showError("Username can only contain letters, numbers, and underscores!");
+                return;
+            }
+
+            // Validate email format
+            if (!/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+                showError("Please enter a valid email address!");
+                return;
+            }
                         demoLink: demoLink.trim()
+                     </div>
+                 </div>
+                 <div class="story-actions">
                      <button class="story-action ${isLiked ? 'liked' : ''}" onclick="toggleLike('${story._id}')">
                          ❤️ ${story.likes.length}
                      </button>
@@ -64,19 +78,20 @@
              
              container.appendChild(storyCard);
          });
-         
-    if (savedToken && savedUser && savedToken !== 'null' && savedUser !== 'null') {
-        try {
-            currentUser = JSON.parse(savedUser);
-            showDashboard();
-        } catch (error) {
-            console.error('Error parsing saved user data:', error);
-            localStorage.removeItem('authToken');
-            localStorage.removeItem('currentUser');
-            showLandingPage();
-        }
-    }
      } catch (error) {
          console.error('Error loading stories:', error);
+         showError('Failed to load stories');
+     }
+ }
+ 
+ if (savedToken && savedUser && savedToken !== 'null' && savedUser !== 'null') {
+     try {
+         currentUser = JSON.parse(savedUser);
+         showDashboard();
+     } catch (error) {
+         console.error('Error parsing saved user data:', error);
+         localStorage.removeItem('authToken');
+         localStorage.removeItem('currentUser');
+         showLandingPage();
      }
  }

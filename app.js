@@ -27,43 +27,17 @@
                 return;
             }
             
-            if (!title || title.trim().length === 0) {
-                showError("Project title is required!");
-                return;
-            }
-            
-            if (!description || description.trim().length === 0) {
-                showError("Project description is required!");
-                return;
-            }
-            
-            if (!technologies || technologies.trim().length === 0) {
-                showError("Technologies are required!");
-                return;
-            }
-            
              storyCard.innerHTML = `
                  <div class="story-header">
                      <div class="story-avatar"></div>
                      <div>
                          <div class="story-author">${story.author.username}</div>
                      </div>
-                        title: title.trim(),
-                        description: description.trim(),
-                        technologies: technologies.trim(),
-                        projectLink: projectLink.trim(),
-            // Validate username format
-            if (!/^[a-zA-Z0-9_]+$/.test(username)) {
-                showError("Username can only contain letters, numbers, and underscores!");
-                return;
-            }
-
-            // Validate email format
-            if (!/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
-                showError("Please enter a valid email address!");
-                return;
-            }
-                        demoLink: demoLink.trim()
+                     <div class="story-time">${timeAgo}</div>
+                 </div>
+                 <div class="story-content">${story.content}</div>
+                 <div class="story-tags">${tags}</div>
+                 <div class="story-actions">
                      <button class="story-action ${isLiked ? 'liked' : ''}" onclick="toggleLike('${story._id}')">
                          ❤️ ${story.likes.length}
                      </button>
@@ -73,16 +47,22 @@
                  </div>
              `;
              
-    if (savedToken && savedUser && savedToken !== 'null' && savedUser !== 'null') {
+             container.appendChild(storyCard);
          });
-        try {
-            currentUser = JSON.parse(savedUser);
-            showDashboard();
-        } catch (error) {
-            console.error('Error parsing saved user data:', error);
-            localStorage.removeItem('authToken');
-            localStorage.removeItem('currentUser');
-            showLandingPage();
-        }
+         
+         if (savedToken && savedUser && savedToken !== 'null' && savedUser !== 'null') {
+             try {
+                 currentUser = JSON.parse(savedUser);
+                 showDashboard();
+             } catch (error) {
+                 console.error('Error parsing saved user data:', error);
+                 localStorage.removeItem('authToken');
+                 localStorage.removeItem('currentUser');
+                 showLandingPage();
+             }
+         }
+     } catch (error) {
+         console.error('Error loading stories:', error);
+         showError('Failed to load stories');
      }
  }
